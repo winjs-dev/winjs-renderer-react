@@ -13,7 +13,7 @@
     "ssr",
     "typescript"
   ],
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/winjs-dev/winjs-renderer-react.git"

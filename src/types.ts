@@ -26,7 +26,7 @@ export interface IClientRoute extends IRoute {
   routes?: IClientRoute[];
 }
 
-export interface ISelectedRoute extends IRoute, RouteObject {}
+export type ISelectedRoute = IRoute & RouteObject;
 
 export interface ISelectedRoutes extends RouteMatch {
   route: ISelectedRoute;

@@ -30,9 +30,9 @@ export {
   useLoaderData,
   useRouteProps,
   useSelectedRoutes,
-} from './appContext';
-export { renderClient, __getRoot } from './browser';
-export { useRouteData } from './routeContext';
-export type { ClientLoader } from './types';
-export { __useFetcher } from './useFetcher';
-export { withRouter, type RouteComponentProps } from './withRouter';
+} from './appContext.js';
+export { __getRoot, renderClient } from './browser.js';
+export { useRouteData } from './routeContext.js';
+export type { ClientLoader } from './types.js';
+export { __useFetcher } from './useFetcher.js';
+export { type RouteComponentProps, withRouter } from './withRouter.js';

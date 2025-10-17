@@ -1,9 +1,8 @@
-// @ts-ignore
 import React from 'react';
 import { generatePath, Navigate, useLocation, useParams } from 'react-router';
-import { useRouteProps } from './appContext';
-import { RouteContext } from './routeContext';
-import { IClientRoute, IRoute, IRoutesById } from './types';
+import { useRouteProps } from './appContext.js';
+import { RouteContext } from './routeContext.js';
+import type { IClientRoute, IRoute, IRoutesById } from './types.js';
 
 export function createClientRoutes(opts: {
   routesById: IRoutesById;

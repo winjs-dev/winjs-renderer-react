@@ -1,4 +1,4 @@
-import { History } from 'history';
+import type { History } from 'history';
 import React, {
   useCallback,
   useEffect,
@@ -7,9 +7,10 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom/client';
 import { matchRoutes, Router, useRoutes } from 'react-router';
-import { AppContext, useAppData } from './appContext';
-import { createClientRoutes } from './routes';
-import { ILoaderData, IRouteComponents, IRoutesById } from './types';
+import { AppContext, useAppData } from './appContext.js';
+import { createClientRoutes } from './routes.js';
+import type { ILoaderData, IRouteComponents, IRoutesById } from './types.js';
+
 let root: ReactDOM.Root | null = null;
 
 // react 18 some scenarios need unmount such as micro app
@@ -57,7 +58,15 @@ function BrowserRoutes(props: {
       isFirst: true,
     });
     return history.listen(onRouteChange);
-  }, [history, props.routes, props.clientRoutes]);
+  }, [
+    history,
+    props.routes,
+    props.clientRoutes,
+    props.pluginManager,
+    props.basename,
+    state.location,
+    state.action,
+  ]);
   return (
     <Router
       navigator={history}
@@ -71,7 +80,7 @@ function BrowserRoutes(props: {
 
 export function Routes(): React.ReactElement | null {
   const { clientRoutes } = useAppData();
-  return useRoutes(clientRoutes);
+  return useRoutes(clientRoutes as any);
 }
 
 /**
@@ -164,7 +173,7 @@ const getBrowser = (
     },
   });
 
-  let rootContainer = (
+  const rootContainer = (
     <BrowserRoutes
       basename={basename}
       pluginManager={opts.pluginManager}
@@ -184,12 +193,9 @@ const getBrowser = (
         // Patched routes has to id
         const matchedRoutes = matchRoutes(clientRoutes as any, id, basename);
         const matchedRouteIds = (
-          matchedRoutes?.map(
-            // @ts-ignore
-            (route) => route.route.id,
-          ) || []
+          matchedRoutes?.map((route) => route.route.id as string) || []
         ).filter(Boolean);
-        matchedRouteIds.forEach((routeId) => {
+        matchedRouteIds.forEach((routeId: string) => {
           const clientLoader = opts.routes[routeId]?.clientLoader;
           const hasClientLoader = !!clientLoader;
           // client loader
@@ -203,19 +209,19 @@ const getBrowser = (
           }
         });
       },
-      [clientLoaderData],
+      [clientLoaderData, opts.routes],
     );
 
     useEffect(() => {
       handleRouteChange(window.location.pathname);
-      return opts.history.listen((e) => {
+      return opts.history.listen((e: any) => {
         handleRouteChange(e.location.pathname);
       });
-    }, []);
+    }, [handleRouteChange, opts.history]);
 
     useLayoutEffect(() => {
       if (typeof opts.callback === 'function') opts.callback();
-    }, []);
+    }, [opts.callback]);
 
     return (
       <AppContext.Provider
@@ -224,7 +230,7 @@ const getBrowser = (
           routeComponents: opts.routeComponents,
           clientRoutes,
           pluginManager: opts.pluginManager,
-          rootElement: opts.rootElement!,
+          rootElement: opts.rootElement as HTMLElement,
           basename,
           clientLoaderData,
           preloadRoute: handleRouteChange,
@@ -244,7 +250,8 @@ const getBrowser = (
  * @returns void
  */
 export function renderClient(opts: RenderClientOpts) {
-  const rootElement = opts.rootElement || document.getElementById('root')!;
+  const rootElement =
+    opts.rootElement || (document.getElementById('root') as HTMLElement);
 
   const Browser = getBrowser(opts, <Routes />);
   // 为了测试，直接返回组件
@@ -255,6 +262,6 @@ export function renderClient(opts: RenderClientOpts) {
     root.render(<Browser />);
     return;
   }
-  // @ts-ignore
+  // @ts-expect-error
   ReactDOM.render(<Browser />, rootElement);
 }

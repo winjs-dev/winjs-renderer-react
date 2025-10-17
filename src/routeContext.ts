@@ -1,5 +1,5 @@
 import React from 'react';
-import { IRoute } from './types';
+import type { IRoute } from './types.js';
 
 export interface IRouteContextType {
   route: IRoute;

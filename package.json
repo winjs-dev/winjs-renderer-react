@@ -1,5 +1,6 @@
 {
-  "name": "winjs-plugin-template",
+  "name": "@winner-fed/renderer-react",
+  "description": "React renderer for WinJS framework",
   "keywords": [
     "winjs",
     "plugin",
@@ -11,10 +12,10 @@
     "typescript",
     "biome"
   ],
-  "version": "0.0.0",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/winjs-dev/winjs-plugin-template.git"
+    "url": "git+https://github.com/winjs-dev/winjs-renderer-react.git"
   },
   "license": "MIT",
   "type": "module",
@@ -49,16 +50,27 @@
     "@rsbuild/core": "^1.4.2",
     "@rslib/core": "^0.10.4",
     "@types/node": "^22.15.34",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
     "@winner-fed/winjs": "*",
     "bumpp": "10.2.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "simple-git-hooks": "^2.13.0",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@babel/runtime": "7.28.4",
+    "history": "5.3.0",
+    "react-router": "7.9.4"
   },
   "peerDevDependencies": {
     "@winner-fed/winjs": "*"
   },
   "peerDependencies": {
-    "@winner-fed/utils": "*"
+    "@winner-fed/utils": "*",
+    "react": ">=19.0.0",
+    "react-dom": ">=19.0.0"
   },
   "peerDependenciesMeta": {
     "@rsbuild/core": {

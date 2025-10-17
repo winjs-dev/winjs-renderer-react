@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 
 export interface RouteComponentProps<T = ReturnType<typeof useParams>> {

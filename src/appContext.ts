@@ -1,13 +1,13 @@
 import React from 'react';
 import { matchRoutes, useLocation } from 'react-router';
-import { useRouteData } from './routeContext';
-import {
+import { useRouteData } from './routeContext.js';
+import type {
   IClientRoute,
   ILoaderData,
   IRouteComponents,
   IRoutesById,
   ISelectedRoutes,
-} from './types';
+} from './types.js';
 
 interface IAppContextType {
   routes: IRoutesById;
@@ -33,7 +33,7 @@ export function useSelectedRoutes() {
   const location = useLocation();
   const { clientRoutes } = useAppData();
   // use `useLocation` get location without `basename`, not need `basename` param
-  const routes = matchRoutes(clientRoutes, location.pathname) as
+  const routes = matchRoutes(clientRoutes as any, location.pathname) as
     | ISelectedRoutes[]
     | undefined;
   return routes || [];
@@ -41,7 +41,9 @@ export function useSelectedRoutes() {
 
 export function useRouteProps<T extends Record<string, any> = any>(): T {
   const currentRoute = useSelectedRoutes().slice(-1);
-  const { element: _, ...props } = currentRoute[0]?.route || {};
+  const route = currentRoute[0]?.route as any;
+  if (!route) return {} as T;
+  const { element: _, ...props } = route;
   return props as T;
 }
 

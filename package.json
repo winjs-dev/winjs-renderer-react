@@ -3,14 +3,15 @@
   "description": "React renderer for WinJS framework",
   "keywords": [
     "winjs",
-    "plugin",
-    "template",
+    "react",
+    "renderer",
+    "react-renderer",
     "winner-fed",
-    "winjs-dev",
-    "rslib",
-    "rsbuild",
-    "typescript",
-    "biome"
+    "framework",
+    "routing",
+    "react-router",
+    "ssr",
+    "typescript"
   ],
   "version": "1.0.0",
   "repository": {

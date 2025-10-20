@@ -11,8 +11,8 @@ WinJS 框架的 React 渲染器，提供客户端渲染能力和 React Router �
 - 📦 **TypeScript 支持** - 完整的类型定义
 - 🎨 **应用上下文** - 通过 Context 访问路由和应用数据
 - ⚡ **懒加载** - 内置代码分割和懒加载支持
-- 🔗 **智能预加载** - Link 组件支持多种预加载策略
-- 🌊 **流式渲染** - 支持 React 18 的 Suspense 流式渲染
+- 🔗 **路由预加载** - 支持程序化路由预加载
+- 🌊 **流式渲染** - 支持 React Suspense 流式渲染
 
 ## 安装
 
@@ -187,6 +187,19 @@ function UserPage() {
 
 > 已废弃，请使用 `useLoaderData()`
 
+#### `useRouteData()`
+
+获取当前路由的上下文数据：
+
+```tsx
+import { useRouteData } from '@winner-fed/renderer-react';
+
+function MyComponent() {
+  const { route } = useRouteData();
+  return <div>当前路由 ID: {route.id}</div>;
+}
+```
+
 #### `useRouteProps()`
 
 获取当前路由的属性（不包括 element）：
@@ -217,33 +230,15 @@ function Breadcrumb() {
 
 #### `<Link>`
 
-带预加载功能的路由链接组件：
+路由链接组件（从 react-router 导出）：
 
 ```tsx
 import { Link } from '@winner-fed/renderer-react';
 
-// 基础用法
 <Link to="/about">关于我们</Link>
-
-// 鼠标悬停时预加载（默认 50ms 延迟）
-<Link to="/user" prefetch="intent">用户页面</Link>
-
-// 渲染时立即预加载
-<Link to="/dashboard" prefetch="render">控制台</Link>
-
-// 进入视口时预加载
-<Link to="/products" prefetch="viewport">产品列表</Link>
-
-// 自定义预加载延迟
-<Link to="/settings" prefetch="intent" prefetchTimeout={200}>设置</Link>
+<Link to="/user/123">用户页面</Link>
+<Link to="/settings" state={{ from: 'home' }}>设置</Link>
 ```
-
-**预加载策略：**
-
-- `intent` - 鼠标悬停时预加载（默认 50ms 延迟）
-- `render` - 组件渲染时立即预加载
-- `viewport` - 链接进入视口时预加载（提前 100px）
-- `none` - 不预加载
 
 #### `withRouter(Component)`
 
@@ -276,7 +271,7 @@ export default withRouter(MyComponent);
 
 ### React Router 导出
 
-直接从 `react-router-dom` 重新导出的常用 API：
+直接从 `react-router` 重新导出的常用 API：
 
 ```tsx
 import {
@@ -292,6 +287,7 @@ import {
   useRoutes,
   
   // 组件
+  Link,
   Navigate,
   NavLink,
   Outlet,
@@ -588,14 +584,15 @@ function Navigation() {
   
   // 程序化预加载
   const handleHover = () => {
-    preloadRoute('/dashboard');
+    if (preloadRoute) {
+      preloadRoute('/dashboard');
+    }
   };
   
   return (
     <nav>
-      {/* 声明式预加载 */}
-      <Link to="/home" prefetch="intent">首页</Link>
-      <Link to="/products" prefetch="viewport">产品</Link>
+      <Link to="/home">首页</Link>
+      <Link to="/products">产品</Link>
       
       {/* 程序化预加载 */}
       <button onMouseEnter={handleHover}>控制台</button>
@@ -626,14 +623,14 @@ function Navigation() {
 - 使用 `useCallback` 避免不必要的函数重建
 - clientLoader 数据全局缓存，避免重复加载
 - 支持流式渲染（useStream），提升首屏加载速度
-- 路由预加载支持，减少页面切换延迟
+- 通过 preloadRoute 支持程序化路由预加载
 
-## 与其他包的关系
+## 依赖关系
 
-- **@winner-fed/preset-react**：为 WinJS 提供 React 支持，会自动设置渲染器路径为此包
-- **@winner-fed/core**：通过插件管理器与核心系统集成
-- **react-router**：基于 React Router v7 构建，重新导出其核心 API
+- **react** / **react-dom**：需要 React 19.0.0 或更高版本
+- **react-router**：使用 React Router v7 进行路由管理
 - **history**：使用 History v5，支持多种路由模式（Browser/Hash/Memory）
+- **@winner-fed/winjs**：与 WinJS 插件系统集成
 
 ## 常见问题
 
@@ -696,12 +693,20 @@ renderClient({
 });
 ```
 
-### 5. Link 预加载何时触发？
+### 5. 如何实现路由预加载？
 
-- `intent`：鼠标悬停 50ms 后触发（可通过 `prefetchTimeout` 自定义）
-- `render`：组件挂载时立即触发
-- `viewport`：链接进入视口（提前 100px）时触发
-- `none`：不预加载
+使用 `useAppData` 的 `preloadRoute` 方法：
+
+```tsx
+const { preloadRoute } = useAppData();
+
+// 在鼠标悬停时预加载
+const handleHover = () => {
+  if (preloadRoute) {
+    preloadRoute('/target-path');
+  }
+};
+```
 
 ## 许可证
 

@@ -1,3 +1,6 @@
+/*
+ * @FilePath: /winjs-renderer-react/src/index.ts
+ */
 export {
   createBrowserHistory,
   createHashHistory,
@@ -31,7 +34,7 @@ export {
   useRouteProps,
   useSelectedRoutes,
 } from './appContext.js';
-export { __getRoot, renderClient } from './browser.js';
+export { renderClient } from './browser.js';
 export { useRouteData } from './routeContext.js';
 export type { ClientLoader } from './types.js';
 export { type RouteComponentProps, withRouter } from './withRouter.js';

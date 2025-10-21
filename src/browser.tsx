@@ -13,11 +13,6 @@ import type { ILoaderData, IRouteComponents, IRoutesById } from './types.js';
 
 let root: ReactDOM.Root | null = null;
 
-// react 18 some scenarios need unmount such as micro app
-export function __getRoot() {
-  return root;
-}
-
 /**
  * 这个组件的功能是 history 发生改变的时候重新触发渲染
  * @param props
@@ -84,17 +79,15 @@ export function Routes(): React.ReactElement | null {
 }
 
 /**
- * umi 渲染需要的配置，在node端调用的哦
+ * 客户端渲染需要的配置
  */
 export type RenderClientOpts = {
   /**
    * 配置 webpack 的 publicPath。
-   * @doc https://umijs.org/docs/api/config#publicpath
    */
   publicPath?: string;
   /**
    * 是否是 runtimePublicPath
-   * @doc https://umijs.org/docs/api/config#runtimepublicpath
    */
   runtimePublicPath?: boolean;
   /**
@@ -120,8 +113,7 @@ export type RenderClientOpts = {
    */
   pluginManager: any;
   /**
-   * 设置路由 base，部署项目到非根目录下时使用。
-   * @doc https://umijs.org/docs/api/config#base
+   * 设置路由 base,部署项目到非根目录下时使用。
    */
   basename?: string;
   /**
@@ -129,9 +121,8 @@ export type RenderClientOpts = {
    */
   loadingComponent?: React.ReactNode;
   /**
-   * react router 的 history，用于控制列表渲染
-   * @doc https://umijs.org/docs/api/config#history
-   * 有多种不同的类型，测试的时候建议用 内存路由，默认是 browserHistory
+   * react router 的 history,用于控制路由渲染
+   * 有多种不同的类型,测试的时候建议用 内存路由,默认是 browserHistory
    */
   history: History;
   /**

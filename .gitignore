@@ -21,3 +21,5 @@ test-results
 /playground/components.d.ts
 /playground/auto-imports.d.ts
 /playground/.eslintrc-auto-import.json
+
+.history
